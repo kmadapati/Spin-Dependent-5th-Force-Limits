@@ -1,0 +1,271 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spin-Dependent 5th Force Limits</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+        }
+        .hidden-section {
+            display: none;
+        }
+        .active-section {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Navigation Bar -->
+    <nav class="bg-blue-600 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold">Spin-Dependent 5th Force Limits</h1>
+            <div class="space-x-4">
+                <button onclick="showSection('home')" class="hover:underline">Home</button>
+                <button onclick="showSection('datasets')" class="hover:underline">Datasets</button>
+                <button onclick="showSection('courses')" class="hover:underline">Courses</button>
+                <button onclick="showSection('concepts')" class="hover:underline">Related Concepts</button>
+                <button onclick="showSection('conferences')" class="hover:underline">Conferences</button>
+                <button onclick="showSection('jobs')" class="hover:underline">Jobs</button>
+                <button onclick="showSection('subscription')" class="hover:underline">Subscription</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto p-6">
+        <!-- Home Section -->
+        <section id="home" class="active-section">
+            <h2 class="text-2xl font-bold mb-4">Overview</h2>
+            <p class="mb-4">Welcome to the Spin-Dependent 5th Force Limits project. This site provides resources and information related to research on spin-dependent fifth force interactions.</p>
+            <h3 class="text-xl font-semibold mb-2">Figure 1</h3>
+            <div class="bg-gray-200 h-64 flex items-center justify-center mb-4">
+                <p class="text-gray-500">Placeholder for Figure 1 (Spin-Dependent 5th Force Limits)</p>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Interactions</h3>
+            <p class="mb-4">Detailed descriptions of interactions related to spin-dependent fifth forces will be provided here.</p>
+        </section>
+
+        <!-- Datasets Section -->
+        <section id="datasets" class="hidden-section">
+            <h2 class="text-2xl font-bold mb-4">Datasets</h2>
+            <div id="datasets-content" class="space-y-4">
+                <p>Loading datasets...</p>
+            </div>
+        </section>
+
+        <!-- Courses Section -->
+        <section id="courses" class="hidden-section">
+            <h2 class="text-2xl font-bold mb-4">Courses</h2>
+            <div id="courses-content" class="space-y-4">
+                <p>Loading courses...</p>
+            </div>
+        </section>
+
+        <!-- Related Concepts Section -->
+        <section id="concepts" class="hidden-section">
+            <h2 class="text-2xl font-bold mb-4">Related Concepts</h2>
+            <div id="concepts-content" class="space-y-4">
+                <p>Loading related concepts...</p>
+            </div>
+        </section>
+
+        <!-- Conferences Section -->
+        <section id="conferences" class="hidden-section">
+            <h2 class="text-2xl font-bold mb-4">Upcoming Conferences</h2>
+            <div id="conferences-content" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <p>Loading conferences...</p>
+            </div>
+        </section>
+
+        <!-- Jobs Section -->
+        <section id="jobs" class="hidden-section">
+            <h2 class="text-2xl font-bold mb-4">Jobs</h2>
+            <div id="jobs-content" class="space-y-4">
+                <p>Loading job opportunities...</p>
+            </div>
+        </section>
+
+        <!-- Subscription Section -->
+        <section id="subscription" class="hidden-section">
+            <h2 class="text-2xl font-bold mb-4">Subscription</h2>
+            <p class="text-xl">Coming Soon, Stay Tuned!</p>
+        </section>
+    </div>
+
+    <!-- JavaScript for Section Toggling and Content Loading -->
+    <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.add('hidden-section');
+                section.classList.remove('active-section');
+            });
+            document.getElementById(sectionId).classList.remove('hidden-section');
+            document.getElementById(sectionId).classList.add('active-section');
+
+            // Load content for specific sections
+            if (sectionId === 'datasets') loadDatasets();
+            if (sectionId === 'courses') loadCourses();
+            if (sectionId === 'concepts') loadConcepts();
+            if (sectionId === 'conferences') loadConferences();
+            if (sectionId === 'jobs') loadJobs();
+        }
+
+        async function fetchJson(file) {
+            try {
+                const response = await fetch(file);
+                if (!response.ok) throw new Error(`Failed to load ${file}`);
+                return await response.json();
+            } catch (error) {
+                console.error(error);
+                return null;
+            }
+        }
+
+        async function checkFileExists(url) {
+            try {
+                const response = await fetch(url, { method: 'HEAD' });
+                return response.ok;
+            } catch {
+                return false;
+            }
+        }
+
+        async function loadDatasets() {
+            const contentDiv = document.getElementById('datasets-content');
+            const data = await fetchJson('data/datasets.json');
+            if (data) {
+                contentDiv.innerHTML = await Promise.all(data.datasets.map(async dataset => {
+                    const fileExists = await checkFileExists(dataset.file);
+                    return `
+                        <div class="bg-white p-4 shadow rounded">
+                            <h3 class="text-lg font-semibold">${dataset.name}</h3>
+                            <div class="bg-gray-200 h-48 flex items-center justify-center mb-2">
+                                ${dataset.image ? `
+                                    <img src="${dataset.image}" alt="${dataset.name}" class="h-full object-cover"
+                                         onerror="this.parentNode.innerHTML='<p class=\\'text-gray-500\\'>Image could not be loaded</p>'">
+                                ` : '<p class="text-gray-500">Placeholder for Dataset Figure</p>'}
+                            </div>
+                            <p>${dataset.description}</p>
+                            ${fileExists ? `
+                                <a href="${dataset.file}" class="text-blue-600 hover:underline">Download Dataset</a>
+                            ` : '<p class="text-gray-500">Dataset file not available</p>'}
+                            <a href="${dataset.link}" class="text-blue-600 hover:underline ml-4">Access Dataset</a>
+                        </div>
+                    `;
+                })).then(htmlArray => htmlArray.join(''));
+            } else {
+                contentDiv.innerHTML = '<p>Error loading datasets. Please try again later.</p>';
+            }
+        }
+
+        async function loadCourses() {
+            const contentDiv = document.getElementById('courses-content');
+            const data = await fetchJson('data/courses.json');
+            if (data) {
+                contentDiv.innerHTML = data.courses.map(course => `
+                    <div class="bg-white p-4 shadow rounded">
+                        <h3 class="text-lg font-semibold">${course.title}</h3>
+                        <p>${course.description}</p>
+                    </div>
+                `).join('');
+            } else {
+                contentDiv.innerHTML = '<p>Error loading courses. Please try again later.</p>';
+            }
+        }
+
+        async function loadConcepts() {
+            const contentDiv = document.getElementById('concepts-content');
+            const data = await fetchJson('data/concepts.json');
+            if (data) {
+                contentDiv.innerHTML = data.concepts.map(concept => `
+                    <div class="bg-white p-4 shadow rounded">
+                        <h3 class="text-lg font-semibold">${concept.name}</h3>
+                        <p>${concept.description}</p>
+                    </div>
+                `).join('');
+            } else {
+                contentDiv.innerHTML = '<p>Error loading concepts. Please try again later.</p>';
+            }
+        }
+
+        async function loadConferences() {
+            const contentDiv = document.getElementById('conferences-content');
+            const data = await fetchJson('data/conferences.json');
+            if (data) {
+                contentDiv.innerHTML = data.conferences.map(conf => `
+                    <div class="bg-white p-4 shadow rounded">
+                        <div class="bg-gray-200 h-32 flex items-center justify-center mb-2">
+                            ${conf.image ? `
+                                <img src="${conf.image}" alt="${conf.name}" class="h-full object-cover"
+                                     onerror="this.parentNode.innerHTML='<p class=\\'text-gray-500\\'>Image could not be loaded</p>'">
+                            ` : '<p class="text-gray-500">Placeholder for City/Logo</p>'}
+                        </div>
+                        <p class="font-semibold">${conf.name} - ${conf.location}</p>
+                        <p>Date: ${conf.date}</p>
+                    </div>
+                `).join('');
+            } else {
+                contentDiv.innerHTML = '<p>Error loading conferences. Please try again later.</p>';
+            }
+        }
+
+        async function loadJobs() {
+            const contentDiv = document.getElementById('jobs-content');
+            const data = await fetchJson('data/jobs.json');
+            if (data) {
+                contentDiv.innerHTML = '<p>For additional opportunities, please contact:</p><ul class="list-disc pl-6">' +
+                    data.jobs.map(job => `
+                        <li>${job.name} - ${job.institute} / ${job.title} (email: <a href="mailto:${job.email}" class="text-blue-600 hover:underline">${job.email}</a>)</li>
+                    `).join('') + '</ul>';
+            } else {
+                contentDiv.innerHTML = '<p>Error loading job opportunities. Please try again later.</p>';
+            }
+        }
+
+        // Load home section by default
+        showSection('home');
+    </script>
+</body>
+</html>

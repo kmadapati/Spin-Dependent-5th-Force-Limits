@@ -1,0 +1,12 @@
+{
+    "courses": [
+        {
+            "title": "Introduction to Quantum Physics",
+            "description": "A foundational course on quantum mechanics and its applications."
+        },
+        {
+            "title": "Advanced Particle Interactions",
+            "description": "Explores advanced topics in particle physics and fifth force theories."
+        }
+    ]
+}

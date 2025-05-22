@@ -1,0 +1,16 @@
+{
+    "conferences": [
+        {
+            "name": "International Physics Symposium",
+            "location": "Boston, MA",
+            "date": "June 15-17, 2025",
+            "image": "images/boston-logo.png"
+        },
+        {
+            "name": "Quantum Interactions Conference",
+            "location": "San Francisco, CA",
+            "date": "August 20-22, 2025",
+            "image": "images/sf-logo.png"
+        }
+    ]
+}

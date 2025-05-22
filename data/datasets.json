@@ -1,0 +1,18 @@
+{
+    "datasets": [
+        {
+            "name": "Spin-Dependent Force Data 2025",
+            "description": "Experimental data on spin-dependent fifth force interactions.",
+            "link": "https://example.com/dataset1",
+            "file": "data/spin-force-data.csv",
+            "image": "images/dataset1-figure.png"
+        },
+        {
+            "name": "Quantum Interaction Measurements",
+            "description": "Measurements related to fifth force limits in quantum systems.",
+            "link": "https://example.com/dataset2",
+            "file": "data/quantum-interaction-data.csv",
+            "image": "images/dataset2-figure.png"
+        }
+    ]
+}

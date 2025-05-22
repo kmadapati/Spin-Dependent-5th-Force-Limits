@@ -1,0 +1,16 @@
+{
+    "jobs": [
+        {
+            "name": "Dr. John Smith",
+            "institute": "Physics Institute",
+            "title": "Research Director",
+            "email": "john.smith@example.com"
+        },
+        {
+            "name": "Prof. Jane Doe",
+            "institute": "Quantum Research Lab",
+            "title": "Principal Investigator",
+            "email": "jane.doe@example.com"
+        }
+    ]
+}
