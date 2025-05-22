@@ -2,7 +2,7 @@ title: Spin-Dependent 5th Force Limits
 description: A repository compiling constraints on spin-dependent exotic interactions.
 baseurl: "" 
 url: "https://lei-cong.github.io"
-#theme: minima
+theme: minima
 plugins:
   - jekyll-feed
   - jekyll-seo-tag

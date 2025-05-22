@@ -1,0 +1,17 @@
+# Ignore Jekyll build artifacts
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore node modules or Ruby gems if used
+node_modules/
+vendor/
+
+# Ignore log files or temp
+*.log
+*.tmp
